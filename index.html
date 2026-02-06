@@ -1,0 +1,686 @@
+import React, { useState, useEffect } from 'react';
+
+// --- Internal Icon Components (No Dependencies Required) ---
+// These SVG components replace the external 'lucide-react' library 
+// to ensure the portfolio works instantly in any environment without installation errors.
+
+const IconWrapper = ({ children, size = 24, className = "" }) => (
+  <svg 
+    xmlns="http://www.w3.org/2000/svg" 
+    width={size} 
+    height={size} 
+    viewBox="0 0 24 24" 
+    fill="none" 
+    stroke="currentColor" 
+    strokeWidth="2" 
+    strokeLinecap="round" 
+    strokeLinejoin="round" 
+    className={className}
+  >
+    {children}
+  </svg>
+);
+
+const Leaf = (props) => (
+  <IconWrapper {...props}>
+    <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 5.2 6 1.5-1.4 1-5 1-8-2-3-4.5-3-7-3" />
+    <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12" />
+  </IconWrapper>
+);
+
+const Sprout = (props) => (
+  <IconWrapper {...props}>
+    <path d="M7 20h10" />
+    <path d="M10 20c5.5-2.5.8-6.4 3-10" />
+    <path d="M9.5 9.4c1.1.8 1.8 2.2 2.3 3.7-2 .4-3.5.4-4.8-.3-1.2-.6-2.3-1.9-3-4.2 2.8-.5 4.4 0 5.5.8z" />
+    <path d="M14.1 6a7 7 0 0 0-1.1 4c1.9-.1 3.3-.6 4.3-1.4 1-1 1.6-2.3 1.7-4.6-2.7.1-4 1-4.9 2z" />
+  </IconWrapper>
+);
+
+const GraduationCap = (props) => (
+  <IconWrapper {...props}>
+    <path d="M22 10v6M2 10l10-5 10 5-10 5z" />
+    <path d="M6 12v5c3 3 9 3 12 0v-5" />
+  </IconWrapper>
+);
+
+const Award = (props) => (
+  <IconWrapper {...props}>
+    <circle cx="12" cy="8" r="7" />
+    <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88" />
+  </IconWrapper>
+);
+
+const Phone = (props) => (
+  <IconWrapper {...props}>
+    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+  </IconWrapper>
+);
+
+const Mail = (props) => (
+  <IconWrapper {...props}>
+    <rect width="20" height="16" x="2" y="4" rx="2" />
+    <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+  </IconWrapper>
+);
+
+const MapPin = (props) => (
+  <IconWrapper {...props}>
+    <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
+    <circle cx="12" cy="10" r="3" />
+  </IconWrapper>
+);
+
+const BookOpen = (props) => (
+  <IconWrapper {...props}>
+    <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
+    <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
+  </IconWrapper>
+);
+
+const Sun = (props) => (
+  <IconWrapper {...props}>
+    <circle cx="12" cy="12" r="4" />
+    <path d="M12 2v2" />
+    <path d="M12 20v2" />
+    <path d="m4.93 4.93 1.41 1.41" />
+    <path d="m17.66 17.66 1.41 1.41" />
+    <path d="M2 12h2" />
+    <path d="M20 12h2" />
+    <path d="m6.34 17.66-1.41 1.41" />
+    <path d="m19.07 4.93-1.41 1.41" />
+  </IconWrapper>
+);
+
+const CloudRain = (props) => (
+  <IconWrapper {...props}>
+    <path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242" />
+    <path d="M16 14v6" />
+    <path d="M8 14v6" />
+    <path d="M12 16v6" />
+  </IconWrapper>
+);
+
+const Cpu = (props) => (
+  <IconWrapper {...props}>
+    <rect x="4" y="4" width="16" height="16" rx="2" ry="2" />
+    <rect x="9" y="9" width="6" height="6" />
+    <path d="M9 1v3" />
+    <path d="M15 1v3" />
+    <path d="M9 20v3" />
+    <path d="M15 20v3" />
+    <path d="M20 9h3" />
+    <path d="M20 14h3" />
+    <path d="M1 9h3" />
+    <path d="M1 14h3" />
+  </IconWrapper>
+);
+
+const ChevronDown = (props) => (
+  <IconWrapper {...props}>
+    <path d="m6 9 6 6 6-6" />
+  </IconWrapper>
+);
+
+const ExternalLink = (props) => (
+  <IconWrapper {...props}>
+    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+    <polyline points="15 3 21 3 21 9" />
+    <line x1="10" x2="21" y1="14" y2="3" />
+  </IconWrapper>
+);
+
+const User = (props) => (
+  <IconWrapper {...props}>
+    <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+    <circle cx="12" cy="7" r="4" />
+  </IconWrapper>
+);
+
+const FileText = (props) => (
+  <IconWrapper {...props}>
+    <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z" />
+    <polyline points="14 2 14 8 20 8" />
+    <line x1="16" x2="8" y1="13" y2="13" />
+    <line x1="16" x2="8" y1="17" y2="17" />
+    <line x1="10" x2="8" y1="9" y2="9" />
+  </IconWrapper>
+);
+
+const Linkedin = (props) => (
+  <IconWrapper {...props}>
+    <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
+    <rect width="4" height="12" x="2" y="9" />
+    <circle cx="4" cy="4" r="2" />
+  </IconWrapper>
+);
+
+const Anchor = (props) => (
+  <IconWrapper {...props}>
+    <circle cx="12" cy="5" r="3" />
+    <line x1="12" x2="12" y1="22" y2="8" />
+    <path d="M5 12H2a10 10 0 0 0 20 0h-3" />
+  </IconWrapper>
+);
+
+const BarChart3 = (props) => (
+  <IconWrapper {...props}>
+    <path d="M3 3v18h18" />
+    <path d="M18 17V9" />
+    <path d="M13 17V5" />
+    <path d="M8 17v-3" />
+  </IconWrapper>
+);
+
+const PenTool = (props) => (
+  <IconWrapper {...props}>
+    <path d="m12 19 7-7 3 3-7 7-3-3z" />
+    <path d="m18 13-1.5-7.5L2 2l3.5 14.5L13 18l5-5z" />
+    <path d="m2 2 7.586 7.586" />
+    <circle cx="11" cy="11" r="2" />
+  </IconWrapper>
+);
+
+const App = () => {
+  const [activeSection, setActiveSection] = useState('home');
+  const [scrolled, setScrolled] = useState(false);
+
+  // Handle scroll for navigation styling
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 50);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const scrollToSection = (id) => {
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+      setActiveSection(id);
+    }
+  };
+
+  const NavLink = ({ id, label, icon: Icon }) => (
+    <button
+      onClick={() => scrollToSection(id)}
+      className={`flex items-center gap-2 px-4 py-2 rounded-full transition-all duration-300 ${
+        activeSection === id
+          ? 'bg-emerald-700 text-white shadow-lg'
+          : 'text-stone-600 hover:bg-emerald-50 hover:text-emerald-700'
+      }`}
+    >
+      <Icon size={16} />
+      <span className="hidden md:inline font-medium">{label}</span>
+    </button>
+  );
+
+  return (
+    <div className="min-h-screen bg-stone-50 text-stone-800 font-sans selection:bg-emerald-200">
+      <style>{`
+        @keyframes fade-in-up {
+          0% { opacity: 0; transform: translateY(20px); }
+          100% { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes bounce-slow {
+          0%, 100% { transform: translateY(-5%); }
+          50% { transform: translateY(5%); }
+        }
+        .animate-fade-in-up {
+          animation: fade-in-up 0.8s ease-out forwards;
+        }
+        .animate-bounce-slow {
+          animation: bounce-slow 3s infinite ease-in-out;
+        }
+      `}</style>
+
+      {/* Navigation */}
+      <nav
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+          scrolled ? 'bg-white/90 backdrop-blur-md shadow-md py-2' : 'bg-transparent py-4'
+        }`}
+      >
+        <div className="container mx-auto px-4 flex justify-between items-center">
+          <div className="text-xl font-bold text-emerald-900 flex items-center gap-2">
+            <Sprout className="text-emerald-600" />
+            <span>Arun<span className="text-stone-500">Vadam</span></span>
+          </div>
+          <div className="hidden md:flex gap-1">
+            <NavLink id="home" label="Home" icon={User} />
+            <NavLink id="about" label="About" icon={Leaf} />
+            <NavLink id="experience" label="Experience" icon={Sun} />
+            <NavLink id="skills" label="Skills" icon={BookOpen} />
+            <NavLink id="contact" label="Contact" icon={Mail} />
+          </div>
+          {/* Mobile Menu Button - simplified for this view */}
+          <button className="md:hidden text-emerald-800" onClick={() => scrollToSection('contact')}>
+            <Mail size={24} />
+          </button>
+        </div>
+      </nav>
+
+      {/* Hero Section */}
+      <section id="home" className="relative pt-32 pb-20 md:pt-48 md:pb-32 overflow-hidden bg-gradient-to-b from-emerald-50 to-stone-50">
+        <div className="absolute top-0 right-0 w-1/3 h-full bg-emerald-100/40 rounded-l-full -z-10 translate-x-1/2 blur-3xl"></div>
+        <div className="absolute bottom-0 left-0 w-1/4 h-1/2 bg-amber-100/40 rounded-r-full -z-10 -translate-x-1/2 blur-3xl"></div>
+        
+        <div className="container mx-auto px-4 flex flex-col md:flex-row items-center gap-12">
+          <div className="flex-1 space-y-6 animate-fade-in-up">
+            <div className="inline-flex items-center gap-2 px-3 py-1 bg-white border border-emerald-100 text-emerald-800 rounded-full text-sm font-semibold tracking-wide shadow-sm">
+              <MapPin size={14} /> Nandyal, Andhra Pradesh
+            </div>
+            <h1 className="text-4xl md:text-6xl font-bold text-stone-900 leading-tight">
+              Cultivating Resilience <br/>
+              <span className="text-emerald-700">Harvesting Innovation</span>
+            </h1>
+            <p className="text-lg text-stone-600 max-w-xl leading-relaxed">
+              I am <strong>Arun Kumar Vadam</strong>, a Horticulture graduate bridging traditional organic wisdom with modern agritech. I specialize in IPM, soil health diagnostics, and protected cultivation to ensure sustainable livelihoods for farmers.
+            </p>
+            
+            <div className="flex flex-wrap gap-4 pt-4">
+              <a 
+                href="mailto:arunvadam3257@gmail.com"
+                className="px-8 py-3 bg-emerald-700 text-white rounded-lg font-semibold shadow-lg hover:bg-emerald-800 hover:shadow-xl transition-all flex items-center gap-2"
+              >
+                Hire Me <User size={18} />
+              </a>
+              <button 
+                onClick={() => scrollToSection('experience')}
+                className="px-8 py-3 bg-white text-emerald-800 border border-emerald-200 rounded-lg font-semibold hover:bg-emerald-50 transition-all shadow-sm"
+              >
+                View Projects
+              </button>
+              <a 
+                href="https://linkedin.com/in/arun-kumar-horticulture" 
+                target="_blank" 
+                rel="noreferrer"
+                className="px-4 py-3 bg-blue-50 text-blue-700 rounded-lg font-semibold hover:bg-blue-100 transition-all flex items-center gap-2"
+              >
+                <Linkedin size={20} />
+              </a>
+            </div>
+          </div>
+          
+          {/* Profile Representation */}
+          <div className="flex-1 flex justify-center relative">
+            <div className="relative w-72 h-72 md:w-96 md:h-96 group">
+              <div className="absolute inset-0 bg-emerald-200 rounded-[2rem] rotate-6 transform transition-transform group-hover:rotate-12 duration-500"></div>
+              <div className="absolute inset-0 bg-stone-200 rounded-[2rem] -rotate-3 transform transition-transform group-hover:-rotate-6 duration-500"></div>
+              <div className="absolute inset-0 bg-white rounded-[2rem] shadow-xl overflow-hidden flex items-center justify-center border-4 border-white">
+                 {/* Placeholder for real image */}
+                 <div className="text-center p-8">
+                    <div className="w-24 h-24 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4 text-emerald-600">
+                        <User size={48} />
+                    </div>
+                    <p className="text-stone-400 text-sm font-medium">Add Your Photo Here</p>
+                 </div>
+              </div>
+              
+              {/* Stat Card 1 */}
+              <div className="absolute -bottom-4 -left-4 bg-white p-4 rounded-xl shadow-lg border-l-4 border-emerald-500 animate-bounce-slow z-20">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 bg-emerald-100 rounded-lg text-emerald-600">
+                    <BarChart3 size={24} />
+                  </div>
+                  <div>
+                    <p className="text-xs text-stone-500 font-bold uppercase">Impact</p>
+                    <p className="font-bold text-stone-800 text-sm">20% ROI in Organic Proj.</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Stat Card 2 */}
+              <div className="absolute top-10 -right-8 bg-white p-4 rounded-xl shadow-lg border-r-4 border-amber-500 animate-bounce-slow delay-700 z-20">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 bg-amber-100 rounded-lg text-amber-600">
+                    <Leaf size={24} />
+                  </div>
+                  <div>
+                    <p className="text-xs text-stone-500 font-bold uppercase">Sustainability</p>
+                    <p className="font-bold text-stone-800 text-sm">Reduced Pesticides by 20%</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Stat Card 3 - Landscape & Architecture Focus */}
+              <div className="absolute top-4 -left-8 bg-white p-4 rounded-xl shadow-lg border-l-4 border-purple-500 animate-bounce-slow delay-1000 z-20 hidden md:block">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 bg-purple-100 rounded-lg text-purple-600">
+                    <PenTool size={24} />
+                  </div>
+                  <div>
+                    <p className="text-xs text-stone-500 font-bold uppercase">Design</p>
+                    <p className="font-bold text-stone-800 text-sm">Landscape & Architecture</p>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+        
+        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 animate-bounce text-stone-400 cursor-pointer" onClick={() => scrollToSection('about')}>
+          <ChevronDown size={24} />
+        </div>
+      </section>
+
+      {/* About Section */}
+      <section id="about" className="py-20 bg-white">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl font-bold text-stone-800 mb-4">About Me</h2>
+              <div className="w-16 h-1 bg-emerald-500 mx-auto rounded-full"></div>
+            </div>
+            
+            <div className="grid md:grid-cols-2 gap-12 items-start">
+              <div className="space-y-6 text-stone-600 leading-relaxed text-lg">
+                <p>
+                  From my family farm to academic research, agriculture is my life's work. I believe in <strong>service through knowledge</strong>—educating farmers to ensure dignity and livelihoods, not just production.
+                </p>
+                <p>
+                  My approach is dual: I respect traditional methods like <strong>Jeevamrutham</strong> and <strong>Panchagavya</strong>, while actively upskilling in <strong>AI and digital tools</strong> to solve modern challenges.
+                </p>
+                <div className="bg-stone-50 p-5 rounded-lg border-l-4 border-emerald-600">
+                  <p className="italic text-stone-700 font-medium">
+                    "I value meaningful alignment. I will not chase roles that pay well but disconnect me from my purpose. No one should suffer because of my actions."
+                  </p>
+                </div>
+              </div>
+              
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <InfoCard 
+                  icon={CloudRain} 
+                  title="Soil Diagnostics" 
+                  desc="Expertise in soil health analysis and nutrient management." 
+                  color="bg-blue-50 text-blue-600"
+                />
+                <InfoCard 
+                  icon={Anchor} 
+                  title="Values-Driven" 
+                  desc="Committed to ethical farming and community welfare." 
+                  color="bg-amber-50 text-amber-600"
+                />
+                <InfoCard 
+                  icon={PenTool} 
+                  title="Landscape & Nursery" 
+                  desc="Designing layouts & managing propagation units." 
+                  color="bg-purple-50 text-purple-600"
+                />
+                <InfoCard 
+                  icon={Cpu} 
+                  title="Tech-Savvy" 
+                  desc="Integrating AI, MS Excel, and digital tools in farming." 
+                  color="bg-emerald-50 text-emerald-600"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Experience Section */}
+      <section id="experience" className="py-20 bg-stone-50">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl font-bold text-stone-800 mb-4">Professional Experience</h2>
+            <p className="text-stone-600 max-w-2xl mx-auto">
+              My hands-on experience spans from research stations to direct farmer advisory services.
+            </p>
+          </div>
+
+          <div className="max-w-5xl mx-auto space-y-8">
+            
+            {/* Experience 1 - HELP */}
+            <ExperienceCard 
+              title="Hands-on Experiential Learning Program (HELP)"
+              subtitle="Sri Krishnadevaraya College of Horticultural Sciences, Anantapur"
+              date="Feb 2025 – June 2025"
+              icon={Leaf}
+              tags={['Organic Farming', 'Marketing', 'ROI Analysis']}
+            >
+              <ul className="list-disc list-inside space-y-2 text-stone-600 mt-4">
+                <li>Directed a <strong>1-acre organic vegetable project</strong>, achieving ~20% ROI through strategic crop planning and direct marketing.</li>
+                <li>Reduced chemical input costs by <strong>25%</strong> by implementing Jeevamrutham, Panchagavya, and Neemastra.</li>
+                <li>Cultivated high-value flowers (Rose, Gerbera) under protected conditions.</li>
+                <li>Executed landscape layouts and managed post-harvest grading and packaging.</li>
+              </ul>
+            </ExperienceCard>
+
+            {/* Experience 2 - RHWEP */}
+            <ExperienceCard 
+              title="Rural Horticultural Work Experience Program (RHWEP)"
+              subtitle="Horticultural Research Station, Anantharajpeta, AP"
+              date="Oct 2024 – Feb 2025"
+              icon={Sun}
+              tags={['Extension', 'Diagnostics', 'Farmer Training']}
+            >
+              <ul className="list-disc list-inside space-y-2 text-stone-600 mt-4">
+                <li>Provided advisory to <strong>50+ farmers</strong> on Banana, Papaya, and Citrus crops.</li>
+                <li>Facilitated adoption of <strong>IPM schedules</strong>, successfully reducing pesticide usage by 15-20% in the target group.</li>
+                <li>Conducted 10+ crop demonstrations and submitted 25+ technical observation reports.</li>
+                <li>Diagnosed pests and diseases in real-time, offering immediate remedial measures.</li>
+              </ul>
+            </ExperienceCard>
+
+          </div>
+        </div>
+      </section>
+
+      {/* Publications Section */}
+      <section className="py-16 bg-white border-y border-stone-200">
+        <div className="container mx-auto px-4 max-w-4xl">
+             <h3 className="text-2xl font-bold text-stone-800 mb-6 flex items-center gap-2">
+                <FileText className="text-emerald-600" /> Publications
+             </h3>
+             <div className="bg-emerald-50 border border-emerald-100 p-6 rounded-xl hover:shadow-md transition-shadow">
+                <h4 className="font-bold text-xl text-emerald-900 mb-2">Organic Horticulture: Cultivating Resilient Soils and Profitable Farms</h4>
+                <p className="text-stone-600 mb-4">
+                    Published on LinkedIn (June 17, 2025). Detailed analysis of soil health management and profitability in organic systems based on field data.
+                </p>
+                <a href="https://linkedin.com/in/arun-kumar-horticulture" target="_blank" rel="noreferrer" className="text-emerald-700 font-semibold hover:underline flex items-center gap-1">
+                    Read Article <ExternalLink size={14} />
+                </a>
+             </div>
+        </div>
+      </section>
+
+      {/* Skills & Certifications */}
+      <section id="skills" className="py-20 bg-emerald-900 text-white relative overflow-hidden">
+        <div className="absolute top-0 left-0 w-full h-full opacity-5 pointer-events-none">
+            {/* Abstract patterns */}
+            <svg className="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+                <path d="M0 100 C 20 0 50 0 100 100 Z" fill="white" />
+            </svg>
+        </div>
+
+        <div className="container mx-auto px-4 relative z-10">
+          <div className="grid md:grid-cols-2 gap-16">
+            
+            {/* Skills Column */}
+            <div>
+              <h3 className="text-2xl font-bold mb-8 flex items-center gap-3">
+                <BookOpen className="text-emerald-400" /> Core Competencies
+              </h3>
+              
+              <div className="space-y-8">
+                <SkillGroup title="Production & Operations">
+                  <SkillTag>Landscape Design</SkillTag>
+                  <SkillTag>Organic Farming</SkillTag>
+                  <SkillTag>Protected Cultivation</SkillTag>
+                  <SkillTag>Nursery Management</SkillTag>
+                  <SkillTag>Resource Budgeting</SkillTag>
+                </SkillGroup>
+
+                <SkillGroup title="Technical Diagnostics">
+                  <SkillTag highlight>Soil Health Analysis</SkillTag>
+                  <SkillTag highlight>Pest & Disease ID</SkillTag>
+                  <SkillTag>Nutrient Scheduling</SkillTag>
+                  <SkillTag>Weed Management</SkillTag>
+                </SkillGroup>
+
+                <SkillGroup title="Digital & Extension">
+                  <SkillTag>Farmer Training</SkillTag>
+                  <SkillTag>PowerPoint / Excel</SkillTag>
+                  <SkillTag>Google Suite</SkillTag>
+                  <SkillTag>AI in Agriculture</SkillTag>
+                </SkillGroup>
+              </div>
+            </div>
+
+            {/* Education & Certs Column */}
+            <div className="space-y-10">
+              <div>
+                <h3 className="text-2xl font-bold mb-8 flex items-center gap-3">
+                  <GraduationCap className="text-emerald-400" /> Education
+                </h3>
+                <div className="space-y-6 border-l-2 border-emerald-700 pl-6 ml-2">
+                  <div className="relative">
+                    <div className="absolute -left-[31px] top-1 w-4 h-4 bg-emerald-400 rounded-full border-4 border-emerald-900"></div>
+                    <h4 className="text-xl font-bold text-white">B.Sc. (Hons.) Horticulture</h4>
+                    <p className="text-emerald-200">Sri Krishnadevaraya College (Dr. YSRHU)</p>
+                    <p className="text-sm text-emerald-400 mt-1">2021 - 2025 | CGPA: 7.02/10</p>
+                  </div>
+                  <div className="relative">
+                    <div className="absolute -left-[31px] top-1 w-4 h-4 bg-emerald-700 rounded-full border-4 border-emerald-900"></div>
+                    <h4 className="text-xl font-bold text-white">Diploma in Horticulture</h4>
+                    <p className="text-emerald-200">SR Horticultural Polytechnic (Dr. YSRHU)</p>
+                    <p className="text-sm text-emerald-400 mt-1">2019 - 2021 | CGPA: 8.32/10</p>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <h3 className="text-2xl font-bold mb-6 flex items-center gap-3">
+                  <Award className="text-emerald-400" /> Certifications
+                </h3>
+                <div className="grid gap-4">
+                  <CertCard title="Certificate in AI in Agriculture" provider="Simplilearn (June 2025)" />
+                  <CertCard title="AI in Landscape" provider="American Horticultural University" />
+                  <CertCard title="Fertilizer Orientation" provider="FAI, New Delhi (2023)" />
+                  <CertCard title="Sericulture & Entrepreneurship" provider="Central Silk Board (2022)" />
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      {/* Contact Section */}
+      <section id="contact" className="py-20 bg-stone-100">
+        <div className="container mx-auto px-4 max-w-4xl text-center">
+          <h2 className="text-3xl font-bold text-stone-800 mb-8">Ready to Contribute</h2>
+          <p className="text-stone-600 mb-12 text-lg">
+            Based in <strong>Nandyal, Andhra Pradesh</strong>. I am adaptable and actively seeking roles in Horticulture where I can apply my skills in sustainable farming, farm management, or extension services.
+          </p>
+
+          <div className="grid md:grid-cols-3 gap-6">
+            <a href="tel:9603552724" className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-all flex flex-col items-center gap-4 group">
+              <div className="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center group-hover:bg-emerald-600 group-hover:text-white transition-colors">
+                <Phone size={24} />
+              </div>
+              <div>
+                <p className="text-sm text-stone-500 font-semibold uppercase">Call Me</p>
+                <p className="text-lg font-bold text-stone-800">9603552724</p>
+              </div>
+            </a>
+
+            <a href="mailto:arunvadam3257@gmail.com" className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-all flex flex-col items-center gap-4 group">
+              <div className="w-12 h-12 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                <Mail size={24} />
+              </div>
+              <div>
+                <p className="text-sm text-stone-500 font-semibold uppercase">Email Me</p>
+                <p className="text-base font-bold text-stone-800 break-all">arunvadam3257@gmail.com</p>
+              </div>
+            </a>
+
+            <div className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-all flex flex-col items-center gap-4 group">
+              <div className="w-12 h-12 bg-amber-100 text-amber-600 rounded-full flex items-center justify-center group-hover:bg-amber-600 group-hover:text-white transition-colors">
+                <MapPin size={24} />
+              </div>
+              <div>
+                <p className="text-sm text-stone-500 font-semibold uppercase">Location</p>
+                <p className="text-lg font-bold text-stone-800">Nandyal, AP</p>
+              </div>
+            </div>
+          </div>
+
+          <footer className="mt-20 border-t border-stone-200 pt-8 text-stone-500 text-sm">
+            <p>&copy; {new Date().getFullYear()} Arun Kumar Vadam.</p>
+            <p className="mt-2 text-stone-400">"No one should suffer because of my actions."</p>
+          </footer>
+        </div>
+      </section>
+    </div>
+  );
+};
+
+// Sub-components
+const InfoCard = ({ icon: Icon, title, desc, color }) => (
+  <div className={`p-5 rounded-xl ${color} bg-opacity-20 border border-transparent hover:border-current transition-colors`}>
+    <Icon size={28} className="mb-3" />
+    <h3 className="font-bold text-stone-800 mb-1">{title}</h3>
+    <p className="text-sm text-stone-700 leading-snug">{desc}</p>
+  </div>
+);
+
+const ExperienceCard = ({ title, subtitle, date, icon: Icon, children, tags }) => (
+  <div className="bg-white p-8 rounded-2xl shadow-sm border border-stone-100 hover:shadow-md transition-shadow">
+    <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-4">
+      <div className="flex items-start gap-4">
+        <div className="p-3 bg-emerald-100 text-emerald-700 rounded-lg shrink-0">
+          <Icon size={24} />
+        </div>
+        <div>
+          <h3 className="text-xl font-bold text-stone-800">{title}</h3>
+          <p className="text-emerald-700 font-medium">{subtitle}</p>
+          <p className="text-sm text-stone-500 mt-1 flex items-center gap-1"><Sun size={12}/> {date}</p>
+        </div>
+      </div>
+      <div className="flex flex-wrap gap-2">
+        {tags.map((tag, i) => (
+          <span key={i} className="px-3 py-1 bg-stone-100 text-stone-600 text-xs font-semibold rounded-full border border-stone-200">
+            {tag}
+          </span>
+        ))}
+      </div>
+    </div>
+    <div className="pl-0 md:pl-[4.5rem]">
+      {children}
+    </div>
+  </div>
+);
+
+const SkillGroup = ({ title, children }) => (
+  <div className="mb-8">
+    <h4 className="text-emerald-200 font-semibold mb-4 text-sm uppercase tracking-wider border-b border-emerald-800 pb-2">{title}</h4>
+    <div className="flex flex-wrap gap-3">
+      {children}
+    </div>
+  </div>
+);
+
+const SkillTag = ({ children, highlight }) => (
+  <span className={`px-4 py-2 rounded-lg text-sm font-medium transition-all cursor-default ${
+    highlight 
+      ? 'bg-amber-500 text-white shadow-lg scale-105' 
+      : 'bg-emerald-800/50 text-emerald-100 hover:bg-emerald-700 border border-emerald-700'
+  }`}>
+    {children}
+  </span>
+);
+
+const CertCard = ({ title, provider }) => (
+  <div className="flex items-start gap-4 bg-emerald-800/30 p-4 rounded-xl border border-emerald-700/50 hover:bg-emerald-800/50 transition-colors">
+    <Award className="text-amber-400 shrink-0 mt-1" size={20} />
+    <div>
+      <p className="font-semibold text-white leading-tight">{title}</p>
+      {provider && <p className="text-xs text-emerald-300 mt-1">{provider}</p>}
+    </div>
+  </div>
+);
+
+export default App;
